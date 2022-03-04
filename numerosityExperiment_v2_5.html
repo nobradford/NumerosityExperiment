@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>My experiment</title>
+  <script src="jspsych-6.2.0/jspsych.js"></script>
+  <script src="jspsych-6.2.0/plugins/jspsych-html-keyboard-response.js"></script>
+  <script src="jspsych-6.2.0/plugins/jspsych-fullscreen.js"></script>
+  <script src="jspsych-6.2.0/plugins/jspsych-image-keyboard-response.js"></script>
+  <script src="jspsych-6.2.0/plugins/jspsych-html-slider-response.js"></script>
+  <script src="jspsych-6.2.0/plugins/jspsych-html-button-response.js"></script>
+  <script src="jspsych-6.2.0/plugins/jspsych-instructions.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link href="jspsych-6.2.0/css/jspsych.css" rel="stylesheet" type="text/css"></link>
+  <style>
+  </style>
+</head>
+
+<body></body>
+
+<script>
+  //var screen = screen.height;
+  /* define constants */
+  Array.prototype.sample = function() {
+    return this[Math.floor(Math.random() * this.length)];
+  }
+ //Wrappers for font sizes
+  var wrapperStart = "<center><div style='font-size: 24px; font-family: Helvetica, sans-serif'>";
+  var wrapperEnd = "</center></div>";
+  var wrapperStart1 = "<left><div style='font-size: 24px; font-family: Helvetica, sans-serif'>";
+  var wrapperEnd1 = "</left></div>";
+  var trialDuration = 750
+  var subDirectory = "img/"
+  var saveLocally = 0;    // 0: Nothing.    1: Download CSV file
+  var displayData = 0;  // 0: Nothing.      1: Display data on browser
+  var launchOnline = 1;    // 0: Nothing.   1: Save to database, consent form, completion code generation, dummy variables created for all 3 IDs
+  var tableName = 'My experiment';
+  let sona_id = jsPsych.data.urlVariables()['sona_id'];
+  var workerId = sona_id;
+  var assignmentId = sona_id;
+  var hitId = sona_id;
+
+  jsPsych.data.addProperties({
+    workerId: workerId,
+    assignmentId: assignmentId,
+    hitId: hitId
+  });
+  // SET LENGTH OF EXPERIMENT
+  var stimuli = generateStimuli(7) //7 ~ 50 minutes // 1 ~ 10 minutes
+
+  function getRndInteger(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
+  }
+  //couldn't figure out how to upload a csv into js so I frankensteined it here lol
+  var stim =[{'Num 1': 11, 'Num 2': 11, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_11', 'jpeg2': 'var_1_number_11'}, {'Num 1': 11, 'Num 2': 13, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_11', 'jpeg2': 'var_1_number_13'}, {'Num 1': 11, 'Num 2': 16, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_11', 'jpeg2': 'var_1_number_16'}, {'Num 1': 13, 'Num 2': 11, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_13', 'jpeg2': 'var_1_number_11'}, {'Num 1': 13, 'Num 2': 13, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_13', 'jpeg2': 'var_1_number_13'}, {'Num 1': 13, 'Num 2': 16, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_13', 'jpeg2': 'var_1_number_16'}, 
+  {'Num 1': 13, 'Num 2': 19, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_13', 'jpeg2': 'var_1_number_19'}, {'Num 1': 16, 'Num 2': 11, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_16', 'jpeg2': 'var_1_number_11'}, {'Num 1': 16, 'Num 2': 13, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_16', 'jpeg2': 'var_1_number_13'}, {'Num 1': 16, 'Num 2': 16, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_16', 'jpeg2': 'var_1_number_16'}, {'Num 1': 16, 'Num 2': 19, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_16', 'jpeg2': 'var_1_number_19'}, {'Num 1': 16, 'Num 2': 23, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_16', 'jpeg2': 'var_1_number_23'}, 
+  {'Num 1': 19, 'Num 2': 13, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_19', 'jpeg2': 'var_1_number_13'}, {'Num 1': 19, 'Num 2': 16, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_19', 'jpeg2': 'var_1_number_16'}, {'Num 1': 19, 'Num 2': 19, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_19', 'jpeg2': 'var_1_number_19'}, {'Num 1': 19, 'Num 2': 23, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_19', 'jpeg2': 'var_1_number_23'}, {'Num 1': 19, 'Num 2': 27, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_19', 'jpeg2': 'var_1_number_27'}, {'Num 1': 23, 'Num 2': 16, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_23', 'jpeg2': 'var_1_number_16'}, {'Num 1': 23, 'Num 2': 19, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_23', 'jpeg2': 'var_1_number_19'}, 
+  {'Num 1': 23, 'Num 2': 23, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_23', 'jpeg2': 'var_1_number_23'}, {'Num 1': 23, 'Num 2': 27, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_23', 'jpeg2': 'var_1_number_27'}, {'Num 1': 23, 'Num 2': 32, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_23', 'jpeg2': 'var_1_number_32'}, 
+  {'Num 1': 27, 'Num 2': 19, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_27', 'jpeg2': 'var_1_number_19'}, {'Num 1': 27, 'Num 2': 23, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_27', 'jpeg2': 'var_1_number_23'}, {'Num 1': 27, 'Num 2': 27, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_27', 'jpeg2': 'var_1_number_27'}, {'Num 1': 27, 'Num 2': 32, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_27', 'jpeg2': 'var_1_number_32'}, {'Num 1': 32, 'Num 2': 23, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_32', 'jpeg2': 'var_1_number_23'}, {'Num 1': 32, 'Num 2': 27, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_32', 'jpeg2': 'var_1_number_27'}, {'Num 1': 32, 'Num 2': 32, 'Var 1': 0.1, 'Var 2': 1.0, 'jpeg1': 'var_0.1_number_32', 'jpeg2': 'var_1_number_32'}, {'Num 1': 11, 'Num 2': 13, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_11', 'jpeg2': 'var_0.1_number_13'}, {'Num 1': 11, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_11', 'jpeg2': 'var_0.1_number_16'}, {'Num 1': 13, 'Num 2': 11, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_13', 'jpeg2': 'var_0.1_number_11'}, 
+  {'Num 1': 13, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_13', 'jpeg2': 'var_0.1_number_16'}, {'Num 1': 13, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_13', 'jpeg2': 'var_0.1_number_19'}, {'Num 1': 16, 'Num 2': 11, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_0.1_number_11'}, {'Num 1': 16, 'Num 2': 13, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_0.1_number_13'}, {'Num 1': 16, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_0.1_number_19'}, {'Num 1': 16, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_0.1_number_23'}, {'Num 1': 19, 'Num 2': 13, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_0.1_number_13'}, 
+  {'Num 1': 19, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_0.1_number_16'}, {'Num 1': 19, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_0.1_number_23'}, {'Num 1': 19, 'Num 2': 27, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_0.1_number_27'}, {'Num 1': 23, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_0.1_number_16'}, {'Num 1': 23, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_0.1_number_19'}, {'Num 1': 23, 'Num 2': 27, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_0.1_number_27'}, {'Num 1': 23, 'Num 2': 32, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_0.1_number_32'}, 
+  {'Num 1': 27, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_27', 'jpeg2': 'var_0.1_number_19'}, {'Num 1': 27, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_27', 'jpeg2': 'var_0.1_number_23'}, {'Num 1': 27, 'Num 2': 32, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_27', 'jpeg2': 'var_0.1_number_32'}, 
+  {'Num 1': 32, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_32', 'jpeg2': 'var_0.1_number_23'}, {'Num 1': 32, 'Num 2': 27, 'Var 1': 1.0, 'Var 2': 0.1, 'jpeg1': 'var_1_number_32', 'jpeg2': 'var_0.1_number_27'}, {'Num 1': 11, 'Num 2': 11, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_11', 'jpeg2': 'var_1_number_11'}, {'Num 1': 11, 'Num 2': 13, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_11', 'jpeg2': 'var_1_number_13'}, {'Num 1': 11, 'Num 2': 16, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_11', 'jpeg2': 'var_1_number_16'}, {'Num 1': 13, 'Num 2': 11, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_13', 'jpeg2': 'var_1_number_11'}, {'Num 1': 13, 'Num 2': 13, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_13', 'jpeg2': 'var_1_number_13'}, {'Num 1': 13, 'Num 2': 16, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_13', 'jpeg2': 'var_1_number_16'}, 
+  {'Num 1': 13, 'Num 2': 19, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_13', 'jpeg2': 'var_1_number_19'}, {'Num 1': 16, 'Num 2': 11, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_16', 'jpeg2': 'var_1_number_11'}, {'Num 1': 16, 'Num 2': 13, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_16', 'jpeg2': 'var_1_number_13'},  {'Num 1': 16, 'Num 2': 16, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_16', 'jpeg2': 'var_1_number_16'}, {'Num 1': 16, 'Num 2': 19, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_16', 'jpeg2': 'var_1_number_19'}, {'Num 1': 16, 'Num 2': 23, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_16', 'jpeg2': 'var_1_number_23'}, {'Num 1': 19, 'Num 2': 13, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_19', 'jpeg2': 'var_1_number_13'}, {'Num 1': 19, 'Num 2': 16, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_19', 'jpeg2': 'var_1_number_16'}, {'Num 1': 19, 'Num 2': 19, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_19', 'jpeg2': 'var_1_number_19'}, {'Num 1': 19, 'Num 2': 23, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_19', 'jpeg2': 'var_1_number_23'}, 
+  {'Num 1': 19, 'Num 2': 27, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_19', 'jpeg2': 'var_1_number_27'}, {'Num 1': 23, 'Num 2': 16, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_23', 'jpeg2': 'var_1_number_16'}, {'Num 1': 23, 'Num 2': 19, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_23', 'jpeg2': 'var_1_number_19'}, {'Num 1': 23, 'Num 2': 23, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_23', 'jpeg2': 'var_1_number_23'}, {'Num 1': 23, 'Num 2': 27, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_23', 'jpeg2': 'var_1_number_27'}, {'Num 1': 23, 'Num 2': 32, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_23', 'jpeg2': 'var_1_number_32'}, {'Num 1': 27, 'Num 2': 19, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_27', 'jpeg2': 'var_1_number_19'}, {'Num 1': 27, 'Num 2': 23, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_27', 'jpeg2': 'var_1_number_23'}, 
+  {'Num 1': 27, 'Num 2': 27, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_27', 'jpeg2': 'var_1_number_27'}, {'Num 1': 27, 'Num 2': 32, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_27', 'jpeg2': 'var_1_number_32'}, {'Num 1': 32, 'Num 2': 23, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_32', 'jpeg2': 'var_1_number_23'}, {'Num 1': 32, 'Num 2': 27, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_32', 'jpeg2': 'var_1_number_27'}, {'Num 1': 32, 'Num 2': 32, 'Var 1': 5.0, 'Var 2': 1.0, 'jpeg1': 'var_5_number_32', 'jpeg2': 'var_1_number_32'}, {'Num 1': 11, 'Num 2': 13, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_11', 'jpeg2': 'var_5_number_13'}, {'Num 1': 11, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_11', 'jpeg2': 'var_5_number_16'}, 
+  {'Num 1': 13, 'Num 2': 11, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_13', 'jpeg2': 'var_5_number_11'}, {'Num 1': 13, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_13', 'jpeg2': 'var_5_number_16'}, {'Num 1': 13, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_13', 'jpeg2': 'var_5_number_19'}, {'Num 1': 16, 'Num 2': 11, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_5_number_11'}, {'Num 1': 16, 'Num 2': 13, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_5_number_13'}, {'Num 1': 16, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_5_number_19'}, {'Num 1': 16, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_16', 'jpeg2': 'var_5_number_23'}, {'Num 1': 19, 'Num 2': 13, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_5_number_13'}, {'Num 1': 19, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_5_number_16'}, {'Num 1': 19, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_5_number_23'}, 
+  {'Num 1': 19, 'Num 2': 27, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_19', 'jpeg2': 'var_5_number_27'}, {'Num 1': 23, 'Num 2': 16, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_5_number_16'}, 
+  {'Num 1': 23, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_5_number_19'}, {'Num 1': 23, 'Num 2': 27, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_5_number_27'}, {'Num 1': 23, 'Num 2': 32, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_23', 'jpeg2': 'var_5_number_32'}, {'Num 1': 27, 'Num 2': 19, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_27', 'jpeg2': 'var_5_number_19'}, {'Num 1': 27, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_27', 'jpeg2': 'var_5_number_23'}, {'Num 1': 27, 'Num 2': 32, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_27', 'jpeg2': 'var_5_number_32'}, {'Num 1': 32, 'Num 2': 23, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_32', 'jpeg2': 'var_5_number_23'}, {'Num 1': 32, 'Num 2': 27, 'Var 1': 1.0, 'Var 2': 5.0, 'jpeg1': 'var_1_number_32', 'jpeg2': 'var_5_number_27'}];
+
+  //makes image pairs from the stim names
+  function generateImagePair(stim,ind,i){
+    var pick = ind[i];
+    var randL = getRndInteger(0,9)
+    var randR = getRndInteger(0,9)
+    var leftImageName = (stim[pick]["jpeg1"]+'_'+randL+'.jpeg');
+    var rightImageName = (stim[pick]["jpeg2"]+'_'+randR+'.jpeg');
+    return [leftImageName, rightImageName]
+  } 
+
+  //shuffles stim names and cycles through each one 
+  function generateStimuli(num) {
+    ind = []
+    for (let i = 0; i < num; i++) {
+        var index = d3.shuffle(d3.range(102));
+        for (let j = 0; j < index.length; j++) {
+            ind.push(index[j]);
+        }
+    }
+    stimuli = []
+    var i = 0
+    while (i < ind.length) {
+      stimuli.push(generateImagePair(stim,ind,i));
+      i++;
+    }
+    return stimuli
+  }
+
+  //create consent form
+  function consent(){
+    var consentFormSignaturetext = wrapperStart1 +
+    '<center><p><b> UNIVERSITY OF CALIFORNIA, IRVINE </b></p></center>' +
+    '<center><p><p><b> Study Information Sheet - Online Study Protocols </b></p></p></center>'+
+    '<center><p><p><i><b> Objective processing and subjective uncertainty </b></i></p></p></center>'+
+    '<center><p><p><b> Lead Researcher </b></p></p></center>'+
+    '<center><p> Megan Peters, Assistant Professor <p> Department of Cognitive Sciences <p> 323.596.1093 megan.peters@uci.edu</p></p></p></center>'+
+    '<ul><li><left><p> Please read the information below and ask questions about anything that you do not understand. A researcher listed above will be available to answer your questions.</p></left></li></ul>'+
+    '<ul><li><left><p> You are being asked to participate in a research study. Participation in this study is voluntary. You may choose to skip a question or a study procedure. You may refuse to participate or discontinue your involvement at any time without penalty or loss of benefits. You are free to withdraw from this study at any time. <b> If you decide to withdraw from this study you should notify the research team immediately.</b></p></left></ul></li>'+
+    '<ul><li><left><p> This is a research study about how we make decisions about what we see, hear, or otherwise experience through our senses. The study will last about 30 minutes to 2 hours. </p></left></li></ul>'+
+    '<ul><ul><li><left> If you elect to participate in this study, you will be asked to do the following task: on every trial, many images in different locations will be shown. Following the presentation of the images, you will be asked to judge various attributes of the images, and rate confidence in your answers.</left></li></ul></ul>'+
+    '<ul><ul><li><left> It is important that you complete the study while in a quite place where you can focus without distraction. Please be sure that you have enough time and are in an appropriate setting before continuing with the study.</left></li></ul></ul>'+
+    '<ul><ul><li><left> Before you start the study, please note the following four items: </left></li></ul></ul>'+
+    '<ol><ol><ol><li><left><b> Please use Google Chrome as your web browser in this experiment.</b> Safari, Firefox, Internet Explorer, and other browsers will not work.</left></li>'+
+    '<li><left> Please resize your browser window NOW so that it fills your entire screen!</left></li>'+
+    '<li><left> Please do NOT adjust your browser size after starting the experiment, as this can disrupt proper presentation of the stimuli.</left></li>'+
+    '<li><left> Finally, please note that it may take the experiment a few seconds to load! You do not need to refresh the page after clicking the button to begin; the experiment will start after a few seconds.</left></li></ol></ol></ol>'+
+    '<ul><li><left> Possible Risks: As with any task requiring you to focus intently on the computer monitor, you may experience some eye fatigue or eye dryness. You will be given many opportunities to rest and look away from the monitor during the break screens.'+
+      'This study involves the collection of participant identifiable data (even if temporary such as for recruitment or compensation purposes), and as such, a breach of confidentiality is a risk associated with the research.</left></li></ul>'+
+    '<ul><li> There are no direct benefits from participation in the study. However, this study may explain how we see, hear, or otherwise judge our environments through our senses. </li></ul>'+
+    '<ul><li> If you are participating in this study through Amazon Mechanical Turk, the data you provide may be collected and used by Amazon as per its privacy agreement. This survey contains a number of checks to make sure that participants are finishing the tasks honestly and completely. As long as you read the instructions and complete the tasks, your HIT will be approved.'+
+      'If you fail these checks, your HIT will be rejected. This research is for residents of the United States over the age of 18; if you are not a resident of the United States and/or under the age of 18, please do not complete this experiment.</li></ul>'+
+    '<ul><li> All research data collected will be stored securely and confidentially on secure file servers that are password protected.</li></ul>'+
+    '<p><i><b> Future Research Use </b></i></p>'+
+    '<ul><li> Researchers will use your information to conduct this study. Once the study is done using your information, we may share them with other researchers so they can use them for other studies in the future. We will not share your name or any other private identifiable information that would let the researchers know who you are. We will not ask your for additional permission to share this de-identified information.</li></ul>'+
+    '<p><i><b> Compensation </b></i></p>'+
+    '<ul><li> You will receive compensation for your participation in one of two ways.</ul></li>'+
+    '<ol><ol><li> You will be compensated $10 for completion of the study. You may choose to withdraw from the experiment at any point, and we also reserve the right to terminate your session at any time. Should you choose to withdraw (or should your session be terminated), you will be paid for the total amount of time you participated at a rate of $10/hr. For example, if you participated for 15 minutes and then stopped, you would be paid $2.50 for participating. Additionally, you will need to email <u>uci.cnclab@gmail.com</u>, notifying the experimenters of when you participated (please include the day and time in the email) so you can be manually compensated through the mTurk system.'+
+      'The maximum amount you can earn for this study is $10/hour, or $200 for 20 hours.</li>'+ 
+      '<p>OR</p>'+
+      '<li> You will receive extra course credit for an eligible course through the UCI Social Sciences human subjects pool. You will receive a 1/2 unit of course credit for each 1/2 hour of participation in this study. Tota amount of credit you may earn for this study is 20 (because you can participate in a maximum of 20 sessions, ranging from 30 minutes to 2 hours each session for a total of no more than 20 hours). The course instructor offering extra course credit for participation in research must provide alternatives to earn extra course credit. The alternative assignment must require equal or less time and effort for the amount of extra credit that can be earned through participation in research.</li></ol></ol>'+
+    '<ul><li> Questions? If you have any comments, concerns, or questions regarding this study please contact the researchers listed at the top of this form.</li></ul>'+
+    '<ul><li> If you have questions or concerns about your rights as a research participant, you can contact the UCI Institutional Review Board by phone (949) 824-6662, by email at <u>IRB@research.uci.edu</u> or at 141 Innovation, Suite 250, Irvine, CA 92697.</li></ul>'+
+    '<p><b> What is an IRB?</b> An Institutional Review Board (IRB) is a committee made up of scientists and non-scientists. The IRBs role is to protect the rights and welfare of human subjects involved in research. The IRB also assures that the research complies with applicable regulations, laws, and institutional policies.</p>'+
+    '<ul><li> If you want to participate in this online portion of the study, click on the button below to start. If you are also interested in participating in the in-person portion of the study (and are able to come to the UC Irvine campus in Irvine, California, USA; travel compensation cannot be provided), you can also email the study team at <u>uci.cnclab@gmail.com</u>.</li></ul>'+
+    wrapperEnd1;
+
+    var consentFormSignature = {
+      type: 'html-button-response',
+      stimulus: consentFormSignaturetext,
+      choices: ['I Agree'],
+      button_html: ['<button class="jspsych-btn" style = "position:absolute; align:center"> I Agree </button>'],
+      prompt: wrapperStart+
+      '<br />'+
+      '<br />'+
+      '<br />'+
+      '<br />'+
+      wrapperEnd
+    };
+    return {
+      timeline: [
+        consentFormSignature,
+            
+      ]
+    }
+  }
+  /* create timeline */
+  var timeline = [];
+  function fullScreenMode(){
+    return{
+      type: 'fullscreen',
+      button_label: 'Next >',
+      message: wrapperStart +
+        '<center><p> When you click "Next" below, your browser will be in fullscreen mode.</center></p>' +
+        wrapperEnd,
+      fullscreen_mode: true
+    };
+  }
+  //timeline.push(fullScreenMode());
+  /* define welcome message trial */
+  var welcome = {
+    type: "html-keyboard-response",
+    stimulus: "Welcome to the experiment. Press any key to begin."
+  };
+
+  /* define instructions trial */
+  var instructions = {
+    type: "html-keyboard-response",
+    stimulus: "<p>In this experiment, two groups of items will " +
+      "appear, one on each side of the screen. </p>" +
+      "<p>You will be asked to choose <strong>which side has more items.</strong></p>" +
+      "<p>The images will only be on the screen for LESS THAN 1 SECOND, so pay close attention.</p>"+
+      "<p>Press any key to continue.</p>",
+    post_trial_gap: 100
+  };
+  //instructions page
+  var instructions2 = {
+    type: "html-keyboard-response",
+    stimulus: 
+      "<p>When asked <strong>which side has more items,</strong></p>" +
+      "<p>if the <strong>left</strong> side has more items, press 1. " +
+      " If the <strong>right</strong> side has more items, press 2.</p>" +
+      "<img src='img/test1.jpeg'> <img src='img/test2.jpeg'>"+
+      "<p>Then rate your confidence in your choice on a scale of 0% to 100%.</p>"+
+      "<p>Press any key to move to a practice round.</p>",
+    post_trial_gap: 100
+  };
+  //practice trial
+  var practice = {
+    type: "html-keyboard-response",
+    stimulus:"<p> Let's practice! Which side has more items?</p>"+
+      "<p>Select 1 for left and 2 for right</p>"+
+      `<img src='img/var_1_number_23_2.jpeg' width= "${screen.width*0.4}"> <img src='img/var_1_number_32_2.jpeg' width= "${screen.width*0.4}">`,
+    post_trial_gap: 100,
+    choices: ['1', '2']
+  };
+  //begin experiment button
+  var begin = {
+    type: "html-keyboard-response",
+    stimulus: "<p>This experiment will last around 1 hour" +
+      "<p>There are 5 built in breaks throughout the experiment" +
+      "<p>Press any key to begin.</p>",
+    post_trial_gap: 100
+  };
+  //type 1 repot
+  var numberJudgement = {
+    type: "html-keyboard-response",
+    choices: ['1', '2'],
+    stimulus: "<p> Which side had more items?</p>" +
+      "<p>select 1 for left and 2 for right</p>",
+  }
+  //type 2 report
+  var confidence = {
+    type: 'html-slider-response',
+    stimulus: '<p>How confident do you feel in your choice?</p>',
+    labels: ['0%', '100%'],
+    require_movement: true,//make true for actual experiment
+    prompt: "<p> </p>",
+  }
+  //breaks
+  var breakTime = {
+    type: 'html-keyboard-response',
+    stimulus:  "<p style='font-size: 25px'>Time to take a break!</p>" + 
+          "<p style='font-size: 25px'>Take a rest for about a minute. Then, Continue by pressing 'C'</p>",
+    choices: "c",
+    post_trial_gap: 100
+  };
+  //
+  function generateImageObject(imagePair){
+    var firstImage = imagePair[0]
+    var secondImage = imagePair[1]
+    return {
+      type: 'html-keyboard-response',
+      stimulus: `<img src='${subDirectory + firstImage}' width= "${screen.width*0.4}"> <img src='${subDirectory + secondImage}' width= "${screen.width*0.4}">`,
+      data: {firstImage},
+      choices: jsPsych.NO_KEYS,
+      trial_duration: trialDuration
+    }
+  }
+
+  function makeFinal(){
+        var finalp1 =
+            "<p style='font-size: 40px'>You're all done!</p>" + 
+            "<p style='font-size: 25px'>Email noraab@uci.edu to confirm you've completed the task and receive credit</p>";
+
+        var final={
+            type: 'instructions',
+            pages:[
+                finalp1
+            ],
+            on_finish: function(){
+                //Set the variable to true so that we submit the HIT
+                allPhasesCompleted = true;
+            },
+            button_label_next:"Submit",
+            show_clickable_nav: true,
+        }
+        return{
+            timeline:[
+                final,
+            ]
+        }
+    }
+
+  var i = 0
+  
+  timeline.push(consent());
+  timeline.push(fullScreenMode());
+  timeline.push(welcome);
+  timeline.push(instructions);
+  timeline.push(instructions2);
+  timeline.push(practice);
+  timeline.push(confidence);
+  timeline.push(begin);
+
+  while (i < stimuli.length) {
+    timeline.push(generateImageObject(stimuli[i]));
+    timeline.push(numberJudgement);
+    timeline.push(confidence);
+    i++;
+    if (i == 150||i == 300||i == 450||i == 600){
+      timeline.push(breakTime);
+    }
+  }
+ timeline.push(makeFinal());
+
+   /* start the experiment */
+  jsPsych.init({
+    timeline: timeline,
+    on_start: function(){
+    console.log(timeline)},
+    on_finish: function() {
+      if(saveLocally == true){
+        jsPsych.data.get().localSave('csv','testSave.csv'); //Save the data locally in a .csv file
+      }
+      if(displayData == true){
+        jsPsych.data.displayData();
+      }
+      if(launchOnline == true){
+        save_data(tableName,jsPsych.data.get().csv());
+      }
+    }
+  });
+  // select all trials
+  var all_data = jsPsych.data.get();
+
+  // get csv representation of data and log to console
+  function save_data(name, data){
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'write_data.php'); // 'write_data.php' is the path to the php file described above.
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify({filedata: data}));
+  }
+
+</script>
+
+</html>
+
+</html>
+
