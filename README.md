@@ -16,7 +16,7 @@ Given the impressive amount of research showing that large amounts of positive e
 First, I expect that the actual numerosity ratio will dominate one’s confidence levels - if the number of objects in both stimulus sets in a pair are exactly the same, confidence will be generally lower than when one side has considerably more objects than the other. Second, within these ratio pairings, I would expect to see a difference between high coherence pairings and low coherence pairings. High coherence pairings will likely yield higher confidence because the objects appear more numerous than they actually are. 
 
 
-##References 
+## References 
 Samaha, J., Barrett, J. J., Sheldon, A. D., LaRocque, J. J., & Postle, B. R. (2016). Dissociating Perceptual Confidence from Discrimination Accuracy Reveals No Influence of Metacognitive Awareness on Working Memory. Frontiers in Psychology, 7. https://doi.org/10.3389/fpsyg.2016.00851
 
 Rhodes, M. G., & Castel, A. D. (2008). Memory predictions are influenced by perceptual information: Evidence for metacognitive illusions. Journal of Experimental Psychology: General, 137(4), 615–625. https://doi.org/10.1037/a0013684
